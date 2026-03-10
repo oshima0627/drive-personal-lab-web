@@ -89,6 +89,7 @@ export default function DiagnosisStepPage({ params }: DiagnosisStepPageProps) {
 
         {/* Question card */}
         <QuestionCard
+          key={stepNum}
           questionText={question.questionText}
           guideText={question.guideText}
           categoryLabel={ANXIETY_TYPE_LABELS[question.anxietyType]}

@@ -1,0 +1,35 @@
+const BASE_URL = 'https://drive-personal-lab.vercel.app';
+
+// X（旧Twitter）シェア
+export function buildXShareUrl(typeId: string, typeName: string): string {
+  const text = encodeURIComponent(
+    `私の運転不安タイプは「${typeName}」でした。\n` +
+      `あなたはどのタイプ？運転不安を4分類で診断してみよう。\n` +
+      `#運転パーソナルラボ #ペーパードライバー\n`
+  );
+  const url = encodeURIComponent(`${BASE_URL}/result?type=${typeId}`);
+  return `https://x.com/intent/tweet?text=${text}&url=${url}`;
+}
+
+// LINEシェア
+export function buildLineShareUrl(typeId: string, typeName: string): string {
+  const text = encodeURIComponent(
+    `私の運転不安タイプは「${typeName}」でした。\n` +
+      `${BASE_URL}/result?type=${typeId}`
+  );
+  return `https://social-plugins.line.me/lineit/share?url=${text}`;
+}
+
+// 結果ページのシェアURL
+export function buildShareUrl(typeId: string): string {
+  return `${BASE_URL}/result?type=${typeId}`;
+}
+
+// 選んだアドバイスのシェアURL
+export function buildAdviceXShareUrl(adviceTexts: string[]): string {
+  const adviceList = adviceTexts.map((t) => `・${t}`).join('\n');
+  const text = encodeURIComponent(
+    `私が選んだ運転不安への一歩：\n${adviceList}\n#運転パーソナルラボ`
+  );
+  return `https://x.com/intent/tweet?text=${text}`;
+}

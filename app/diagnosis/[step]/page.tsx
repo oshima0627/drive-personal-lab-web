@@ -93,7 +93,7 @@ export default function DiagnosisStepPage({ params }: DiagnosisStepPageProps) {
           questionText={question.questionText}
           guideText={question.guideText}
           categoryLabel={ANXIETY_TYPE_LABELS[question.anxietyType]}
-          selectedAnswer={answers[stepNum - 1]}
+          selectedAnswer={null}
           onAnswer={handleAnswer}
         />
 

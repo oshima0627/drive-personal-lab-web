@@ -13,11 +13,11 @@ export function buildXShareUrl(typeId: string, typeName: string): string {
 
 // LINEシェア
 export function buildLineShareUrl(typeId: string, typeName: string): string {
-  const text = encodeURIComponent(
+  const message = encodeURIComponent(
     `私の運転不安タイプは「${typeName}」でした。\n` +
       `${BASE_URL}/result?type=${typeId}`
   );
-  return `https://social-plugins.line.me/lineit/share?url=${text}`;
+  return `https://line.me/R/msg/text/?${message}`;
 }
 
 // 結果ページのシェアURL

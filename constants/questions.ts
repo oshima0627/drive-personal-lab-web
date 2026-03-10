@@ -60,9 +60,8 @@ export const QUESTIONS: Question[] = [
   {
     id: 9,
     anxietyType: 'experience',
-    questionText: '運転中に怖いと感じた・感じそうな場面を思い浮かべることがありますか？',
+    questionText: 'これから運転することを考えると、怖い場面や失敗を想像して不安になることがありますか？',
     orderIndex: 9,
-    guideText: '※ まだ運転経験が少ない方は、想像や予感として感じるかどうかで答えてください',
   },
   {
     id: 10,
@@ -73,7 +72,7 @@ export const QUESTIONS: Question[] = [
   {
     id: 11,
     anxietyType: 'experience',
-    questionText: '運転中のヒヤリとした場面（実際・想像問わず）が頭に浮かぶことがありますか？',
+    questionText: '過去のヒヤリとした場面や怖かった経験（実際・想像問わず）が、今も繰り返し頭に浮かぶことがありますか？',
     orderIndex: 11,
   },
   {

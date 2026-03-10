@@ -57,9 +57,6 @@ export default function HomePage() {
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero section */}
       <section className="px-4 pt-16 pb-12 max-w-2xl mx-auto text-center">
-        <div className="inline-block bg-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-wide">
-          無料・ログイン不要
-        </div>
         <h1 className="text-3xl font-extrabold text-gray-900 mb-3 leading-tight">
           運転パーソナルラボ
         </h1>

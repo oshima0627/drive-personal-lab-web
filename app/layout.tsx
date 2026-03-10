@@ -14,21 +14,21 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: '運転不安診断 | Drive Personal Lab',
+  title: '1分で簡単診断 | 運転パーソナルラボ',
   description:
     'ペーパードライバー・運転初心者向け。知識・技術・経験・環境の4分類で運転不安をセルフ診断。あなたのタイプを無料で診断。',
   openGraph: {
-    title: '運転不安診断 | Drive Personal Lab',
+    title: '1分で簡単診断 | 運転パーソナルラボ',
     description:
       'ペーパードライバー・運転初心者向け。知識・技術・経験・環境の4分類で運転不安をセルフ診断。',
     url: 'https://drive-personal-lab.vercel.app',
-    siteName: 'Drive Personal Lab',
+    siteName: '運転パーソナルラボ',
     locale: 'ja_JP',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '運転不安診断 | Drive Personal Lab',
+    title: '1分で簡単診断 | 運転パーソナルラボ',
     description: 'ペーパードライバー・運転初心者向け運転不安セルフ診断アプリ。',
   },
 };
@@ -47,7 +47,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebApplication',
-              name: 'Drive Personal Lab',
+              name: '運転パーソナルラボ',
               description: '運転不安セルフ診断アプリ',
               applicationCategory: 'HealthApplication',
               offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },

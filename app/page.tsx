@@ -61,10 +61,10 @@ export default function HomePage() {
           無料・ログイン不要
         </div>
         <h1 className="text-3xl font-extrabold text-gray-900 mb-3 leading-tight">
-          Drive Personal Lab
+          運転パーソナルラボ
         </h1>
         <p className="text-lg font-semibold text-primary mb-2">
-          運転不安セルフ診断
+          1分で簡単診断
         </p>
         <p className="text-gray-500 text-sm mb-8 leading-relaxed">
           知識・技術・経験・環境の4分類で<br />
@@ -95,7 +95,7 @@ export default function HomePage() {
           診断を始める
         </Link>
 
-        <p className="mt-4 text-xs text-gray-400">16問・約3分</p>
+        <p className="mt-4 text-xs text-gray-400">16問・約1分</p>
       </section>
 
       {/* 4 category cards */}

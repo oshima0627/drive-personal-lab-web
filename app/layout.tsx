@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: '1分で簡単診断 | 運転パーソナルラボ',
     description:
       'ペーパードライバー・運転初心者向け。知識・技術・経験・環境の4分類で運転不安をセルフ診断。',
-    url: 'https://drive-personal-lab.vercel.app',
+    url: 'https://drive-personal-lab-web.vercel.app',
     siteName: '運転パーソナルラボ',
     locale: 'ja_JP',
     type: 'website',

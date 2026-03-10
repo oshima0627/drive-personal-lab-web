@@ -1,4 +1,4 @@
-const BASE_URL = 'https://drive-personal-lab.vercel.app';
+const BASE_URL = 'https://drive-personal-lab-web.vercel.app';
 
 // X（旧Twitter）シェア
 export function buildXShareUrl(typeId: string, typeName: string): string {

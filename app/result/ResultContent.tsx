@@ -109,9 +109,10 @@ export default function ResultContent() {
         {/* Radar chart (only in normal mode) */}
         {!isSharedMode && result && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
-            <h2 className="text-sm font-semibold text-gray-500 mb-3 text-center">
-              4分類スコア
+            <h2 className="text-sm font-semibold text-gray-500 mb-1 text-center">
+              不安度スコア
             </h2>
+            <p className="text-xs text-gray-400 text-center mb-3">高いほど不安が強い分野です</p>
             <RadarChart scores={result.scores} />
             {/* Score badges */}
             <div className="grid grid-cols-2 gap-2 mt-3">
@@ -121,13 +122,13 @@ export default function ResultContent() {
                   className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
                 >
                   <span className="text-xs font-medium text-gray-600">
-                    {SCORE_LABELS[key]}
+                    {SCORE_LABELS[key]}不安
                   </span>
                   <span
                     className="text-sm font-bold"
                     style={{ color: SCORE_COLORS[key] }}
                   >
-                    {score}点
+                    {score}
                   </span>
                 </div>
               ))}

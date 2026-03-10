@@ -79,7 +79,7 @@ export default function DetailSection({ scores }: DetailSectionProps) {
                 <span className="font-semibold text-gray-800">{cat.label}</span>
               </div>
               <span className="text-xl font-bold" style={{ color: cat.color }}>
-                {cat.score}点
+                不安度 {cat.score}
               </span>
             </div>
 

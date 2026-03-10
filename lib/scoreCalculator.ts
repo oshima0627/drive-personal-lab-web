@@ -20,7 +20,8 @@ export function calcScores(answers: number[]): Scores {
 }
 
 export function resolveTypeId(scores: Scores): string {
-  const HIGH = 60;
+  // 高不安しきい値：各分類12点満点のうち6点以上 = 50点以上を不安ありと判定
+  const HIGH = 50;
   const LOW_MAX = 40;
 
   // 低不安タイプ判定：全分類の最高スコアが40点未満

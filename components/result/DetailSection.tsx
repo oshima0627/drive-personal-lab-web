@@ -62,7 +62,8 @@ export default function DetailSection({ scores }: DetailSectionProps) {
   return (
     <div className="flex flex-col gap-4">
       {categories.map((cat) => {
-        const isHigh = cat.score >= 60;
+        // 各分類12点満点のうち6点以上（= 50点以上）を不安ありと判定
+        const isHigh = cat.score >= 50;
         return (
           <div
             key={cat.key}
@@ -101,7 +102,7 @@ export default function DetailSection({ scores }: DetailSectionProps) {
               </div>
             ) : (
               <p className="text-sm text-gray-400 italic">
-                この分野はあまり気になっていないようです
+                今のところ、この分野はあまり気になっていないようです
               </p>
             )}
           </div>

@@ -145,26 +145,18 @@ export default function ResultContent() {
 
         {/* Action buttons (normal mode) */}
         {!isSharedMode && (
-          <div className="flex flex-col gap-3 mb-5">
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={scrollToAdvice}
-                className="py-3 px-4 bg-primary text-white rounded-xl text-sm font-medium hover:bg-blue-800 transition-colors"
-              >
-                次の一歩を考える
-              </button>
-              <button
-                onClick={scrollToDetail}
-                className="py-3 px-4 bg-white border-2 border-primary text-primary rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors"
-              >
-                詳細を見る
-              </button>
-            </div>
+          <div className="grid grid-cols-2 gap-3 mb-5">
             <button
-              onClick={() => setShowModal(true)}
-              className="w-full py-3 px-4 bg-orange-500 text-white rounded-xl text-sm font-bold hover:bg-orange-600 transition-colors shadow-sm"
+              onClick={scrollToAdvice}
+              className="py-3 px-4 bg-primary text-white rounded-xl text-sm font-medium hover:bg-blue-800 transition-colors"
             >
-              オンライン診断に申し込む
+              次の一歩を考える
+            </button>
+            <button
+              onClick={scrollToDetail}
+              className="py-3 px-4 bg-white border-2 border-primary text-primary rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors"
+            >
+              詳細を見る
             </button>
           </div>
         )}
@@ -186,6 +178,22 @@ export default function ResultContent() {
               気になるアドバイスにチェックを入れてみましょう
             </p>
             <AdviceChecklist typeId={anxietyType.id} checkedIds={checkedAdviceIds} />
+
+            {/* Online diagnosis CTA */}
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <p className="text-sm font-semibold text-gray-800 mb-1">
+                一人で抱え込まず、専門家に相談してみませんか？
+              </p>
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                オンライン診断では、あなたの不安のタイプをもとに、専門家が一緒に整理をお手伝いします。
+              </p>
+              <button
+                onClick={() => setShowModal(true)}
+                className="w-full py-3.5 px-4 bg-orange-500 text-white rounded-xl text-sm font-bold hover:bg-orange-600 transition-colors shadow-sm"
+              >
+                オンライン診断に申し込む
+              </button>
+            </div>
           </div>
         )}
 

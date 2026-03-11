@@ -182,10 +182,10 @@ export default function ResultContent() {
             {/* Online diagnosis CTA */}
             <div className="mt-6 pt-5 border-t border-gray-100">
               <p className="text-sm font-semibold text-gray-800 mb-1">
-                一人で抱え込まず、専門家に相談してみませんか？
+                もっと詳しく自分の不安を知りたい方へ
               </p>
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-                オンライン診断では、あなたの不安のタイプをもとに、専門家が一緒に整理をお手伝いします。
+                オンライン診断では、簡単診断では分からなかったあなたの不安をより深く掘り下げます。
               </p>
               <button
                 onClick={() => setShowModal(true)}

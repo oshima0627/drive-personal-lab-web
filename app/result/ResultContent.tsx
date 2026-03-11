@@ -32,14 +32,21 @@ export default function ResultContent() {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type');
   const result = useResultStore((s) => s.result);
-  const [mounted, setMounted] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const adviceSectionRef = useRef<HTMLDivElement>(null);
   const detailSectionRef = useRef<HTMLDivElement>(null);
 
+  // Wait for Zustand persist hydration to complete before rendering,
+  // to avoid race condition where hydration overwrites a freshly-set result.
   useEffect(() => {
-    setMounted(true);
+    if (useResultStore.persist.hasHydrated()) {
+      setHydrated(true);
+    } else {
+      const unsub = useResultStore.persist.onFinishHydration(() => setHydrated(true));
+      return unsub;
+    }
   }, []);
 
   // Shared URL mode: show type info without scores
@@ -57,7 +64,7 @@ export default function ResultContent() {
     detailSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (!mounted) {
+  if (!hydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-400 text-sm">読み込み中...</div>

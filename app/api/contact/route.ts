@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { QUESTIONS, ANSWER_OPTIONS } from '@/constants/questions';
 
 export async function POST(req: NextRequest) {
-  const { nickname, email, diagnosisType, diagnosisDescription, scores } = await req.json();
+  const { nickname, email, diagnosisType, diagnosisDescription, scores, rawAnswers } = await req.json();
 
   if (!nickname || !email) {
     return NextResponse.json({ error: 'ニックネームとメールアドレスは必須です' }, { status: 400 });
@@ -22,6 +23,16 @@ export async function POST(req: NextRequest) {
     ? `\n【不安度スコア】\n知識不安: ${scores.knowledge}\n技術不安: ${scores.skill}\n経験不安: ${scores.experience}\n環境不安: ${scores.environment}`
     : '';
 
+  const answersText =
+    Array.isArray(rawAnswers) && rawAnswers.length > 0
+      ? '\n【16問の回答】\n' +
+        QUESTIONS.map((q) => {
+          const score = rawAnswers[q.orderIndex - 1] ?? 0;
+          const label = ANSWER_OPTIONS.find((o) => o.score === score)?.label ?? '—';
+          return `Q${q.id}. ${q.questionText}\n  → ${label}`;
+        }).join('\n')
+      : '';
+
   const mailOptions = {
     from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
     to: process.env.CONTACT_TO ?? process.env.SMTP_USER,
@@ -39,7 +50,7 @@ ${email}
 ${diagnosisType}
 
 【タイプの説明】
-${diagnosisDescription}${scoresText}
+${diagnosisDescription}${scoresText}${answersText}
 `,
   };
 

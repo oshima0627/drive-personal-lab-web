@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AnxietyTypeDefinition } from '@/constants/anxietyTypes';
+import AnswersSummary from '@/components/result/AnswersSummary';
 
 interface Scores {
   knowledge: number;
@@ -13,12 +14,13 @@ interface Scores {
 interface Props {
   anxietyType: AnxietyTypeDefinition;
   scores?: Scores;
+  rawAnswers?: number[];
   onClose: () => void;
 }
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
-export default function OnlineDiagnosisModal({ anxietyType, scores, onClose }: Props) {
+export default function OnlineDiagnosisModal({ anxietyType, scores, rawAnswers, onClose }: Props) {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<Status>('idle');
@@ -39,6 +41,7 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, onClose }: P
           diagnosisType: anxietyType.name,
           diagnosisDescription: anxietyType.description,
           scores,
+          rawAnswers,
         }),
       });
 
@@ -109,6 +112,11 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, onClose }: P
                       <span className="font-medium">{value}</span>
                     </div>
                   ))}
+                </div>
+              )}
+              {rawAnswers && rawAnswers.length > 0 && (
+                <div className="mt-3">
+                  <AnswersSummary rawAnswers={rawAnswers} />
                 </div>
               )}
             </div>

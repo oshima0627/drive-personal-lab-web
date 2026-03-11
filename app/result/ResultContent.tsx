@@ -12,6 +12,7 @@ import AdviceChecklist from '@/components/result/AdviceChecklist';
 import DetailSection from '@/components/result/DetailSection';
 import ShareButtons from '@/components/result/ShareButtons';
 import OnlineDiagnosisModal from '@/components/result/OnlineDiagnosisModal';
+import AnswersSummary from '@/components/result/AnswersSummary';
 
 const SCORE_LABELS: Record<string, string> = {
   knowledge: '知識',
@@ -220,6 +221,9 @@ export default function ResultContent() {
           <div ref={detailSectionRef} className="mb-5">
             <h2 className="text-base font-bold text-gray-800 mb-3">分類別の詳細</h2>
             <DetailSection scores={result.scores} />
+            <div className="mt-4">
+              <AnswersSummary rawAnswers={result.rawAnswers} />
+            </div>
           </div>
         )}
 
@@ -239,6 +243,7 @@ export default function ResultContent() {
         <OnlineDiagnosisModal
           anxietyType={anxietyType}
           scores={result?.scores}
+          rawAnswers={result?.rawAnswers}
           onClose={() => setShowModal(false)}
         />
       )}

@@ -61,12 +61,13 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, rawAnswers, 
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/50"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+      <div className="flex min-h-full items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
         {status === 'success' ? (
           <div className="text-center py-6">
             <div className="text-4xl mb-4">✅</div>
@@ -164,6 +165,7 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, rawAnswers, 
             </form>
           </>
         )}
+        </div>
       </div>
     </div>
   );

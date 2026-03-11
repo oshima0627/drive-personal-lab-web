@@ -11,6 +11,7 @@ import AnxietyTypeCard from '@/components/result/AnxietyTypeCard';
 import AdviceChecklist from '@/components/result/AdviceChecklist';
 import DetailSection from '@/components/result/DetailSection';
 import ShareButtons from '@/components/result/ShareButtons';
+import OnlineDiagnosisModal from '@/components/result/OnlineDiagnosisModal';
 
 const SCORE_LABELS: Record<string, string> = {
   knowledge: '知識',
@@ -31,6 +32,7 @@ export default function ResultContent() {
   const typeParam = searchParams.get('type');
   const result = useResultStore((s) => s.result);
   const [mounted, setMounted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const adviceSectionRef = useRef<HTMLDivElement>(null);
   const detailSectionRef = useRef<HTMLDivElement>(null);
@@ -143,18 +145,26 @@ export default function ResultContent() {
 
         {/* Action buttons (normal mode) */}
         {!isSharedMode && (
-          <div className="grid grid-cols-2 gap-3 mb-5">
+          <div className="flex flex-col gap-3 mb-5">
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={scrollToAdvice}
+                className="py-3 px-4 bg-primary text-white rounded-xl text-sm font-medium hover:bg-blue-800 transition-colors"
+              >
+                次の一歩を考える
+              </button>
+              <button
+                onClick={scrollToDetail}
+                className="py-3 px-4 bg-white border-2 border-primary text-primary rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors"
+              >
+                詳細を見る
+              </button>
+            </div>
             <button
-              onClick={scrollToAdvice}
-              className="py-3 px-4 bg-primary text-white rounded-xl text-sm font-medium hover:bg-blue-800 transition-colors"
+              onClick={() => setShowModal(true)}
+              className="w-full py-3 px-4 bg-orange-500 text-white rounded-xl text-sm font-bold hover:bg-orange-600 transition-colors shadow-sm"
             >
-              次の一歩を考える
-            </button>
-            <button
-              onClick={scrollToDetail}
-              className="py-3 px-4 bg-white border-2 border-primary text-primary rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors"
-            >
-              詳細を見る
+              オンライン診断に申し込む
             </button>
           </div>
         )}
@@ -215,6 +225,15 @@ export default function ResultContent() {
           </Link>
         </div>
       </div>
+
+      {/* Online diagnosis application modal */}
+      {showModal && (
+        <OnlineDiagnosisModal
+          anxietyType={anxietyType}
+          scores={result?.scores}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

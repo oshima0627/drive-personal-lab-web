@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnxietyTypeDefinition } from '@/constants/anxietyTypes';
 import AnswersSummary from '@/components/result/AnswersSummary';
 
@@ -25,6 +25,14 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, rawAnswers, 
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Prevent background scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,12 +163,17 @@ export default function OnlineDiagnosisModal({ anxietyType, scores, rawAnswers, 
                 <p className="text-sm text-red-500">{errorMessage}</p>
               )}
 
+              <div className="bg-gray-50 rounded-xl px-4 py-3 text-center">
+                <p className="text-sm font-bold text-gray-800">40分 ¥5,000</p>
+                <p className="text-xs text-gray-500 mt-0.5">お申し込み後にご案内いたします</p>
+              </div>
+
               <button
                 type="submit"
                 disabled={status === 'sending'}
                 className="bg-primary text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {status === 'sending' ? '送信中...' : '申し込みを送信する'}
+                {status === 'sending' ? '送信中...' : '申し込む'}
               </button>
             </form>
           </>

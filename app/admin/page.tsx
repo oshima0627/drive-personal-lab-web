@@ -1,29 +1,25 @@
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import AdminClient from './AdminClient';
 
 export const dynamic = 'force-dynamic';
 
-async function loginAction(formData: FormData) {
-  'use server';
-  const pw = formData.get('pw') as string;
-  if (pw && pw === process.env.ADMIN_PASSWORD) {
-    const cookieStore = await cookies();
-    cookieStore.set('admin_authed', 'true', { httpOnly: true, maxAge: 60 * 60 * 8 });
-  }
-  redirect('/admin');
-}
-
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: { error?: string };
+}) {
   const cookieStore = await cookies();
   const authed = cookieStore.get('admin_authed')?.value === 'true';
 
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <form action={loginAction} className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
+        <form method="POST" action="/admin/login" className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
           <h1 className="text-lg font-bold text-gray-800 mb-6 text-center">管理者ログイン</h1>
+          {searchParams.error && (
+            <p className="text-red-500 text-sm mb-4 text-center">パスワードが違います</p>
+          )}
           <input
             type="password"
             name="pw"

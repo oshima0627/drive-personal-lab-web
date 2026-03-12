@@ -29,7 +29,7 @@ export function buildShareUrl(typeId: string): string {
 export function buildAdviceXShareUrl(adviceTexts: string[]): string {
   const adviceList = adviceTexts.map((t) => `・${t}`).join('\n');
   const text = encodeURIComponent(
-    `私が選んだ運転不安への一歩：\n${adviceList}\n#運転パーソナルラボ`
+    `私が実践する運転不安への一歩：\n${adviceList}\n#運転パーソナルラボ`
   );
   return `https://x.com/intent/tweet?text=${text}`;
 }

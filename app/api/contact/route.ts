@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { QUESTIONS, ANSWER_OPTIONS } from '@/constants/questions';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: NextRequest) {
   const { nickname, email, diagnosisType, diagnosisDescription, scores, rawAnswers } = await req.json();
@@ -56,6 +57,17 @@ ${diagnosisDescription}${scoresText}${answersText}
 
   try {
     await transporter.sendMail(mailOptions);
+
+    // Supabase に申し込み内容を保存
+    await supabaseAdmin.from('contact_submissions').insert({
+      nickname,
+      email,
+      diagnosis_type: diagnosisType,
+      diagnosis_description: diagnosisDescription,
+      scores: scores ?? null,
+      raw_answers: rawAnswers ?? null,
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('メール送信エラー:', error);

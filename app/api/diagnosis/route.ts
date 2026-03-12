@@ -1,16 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: NextRequest) {
-  const { takenAt, scores, typeId, rawAnswers } = await req.json();
+  const { typeId, scores, rawAnswers, takenAt } = await req.json();
 
-  const { error } = await getSupabase().from('diagnosis_results').insert({
-    taken_at: takenAt,
+  if (!typeId || !scores) {
+    return NextResponse.json({ error: 'typeId and scores are required' }, { status: 400 });
+  }
+
+  const { error } = await supabaseAdmin.from('diagnosis_results').insert({
     type_id: typeId,
     scores,
-    raw_answers: rawAnswers,
+    raw_answers: rawAnswers ?? null,
+    taken_at: takenAt ?? new Date().toISOString(),
   });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('診断結果保存エラー:', error);
+    return NextResponse.json({ error: '保存に失敗しました' }, { status: 500 });
+  }
+
   return NextResponse.json({ success: true });
 }

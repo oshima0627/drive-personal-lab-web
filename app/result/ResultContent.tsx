@@ -34,6 +34,7 @@ export default function ResultContent() {
   const result = useResultStore((s) => s.result);
   const [hydrated, setHydrated] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const savedRef = useRef(false);
 
   const adviceSectionRef = useRef<HTMLDivElement>(null);
   const detailSectionRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,22 @@ export default function ResultContent() {
       return unsub;
     }
   }, []);
+
+  // 診断結果を Supabase に保存（初回のみ・シェアURLモードは除く）
+  useEffect(() => {
+    if (!hydrated || savedRef.current || typeParam || !result) return;
+    savedRef.current = true;
+    fetch('/api/diagnosis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        typeId: result.typeId,
+        scores: result.scores,
+        rawAnswers: result.rawAnswers,
+        takenAt: result.takenAt,
+      }),
+    }).catch(() => {/* 保存失敗は無視 */});
+  }, [hydrated, typeParam, result]);
 
   // Shared URL mode: show type info without scores
   const isSharedMode = !!typeParam;

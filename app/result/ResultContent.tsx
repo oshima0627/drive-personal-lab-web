@@ -183,7 +183,7 @@ export default function ResultContent() {
           >
             <h2 className="text-base font-bold text-gray-800 mb-1">次の一歩を考える</h2>
             <p className="text-xs text-gray-400 mb-4">
-              実践したアドバイスにチェックを入れて、自分の歩みを記録しましょう
+              実践するアドバイスにチェックを入れて、自分の歩みを記録しましょう
             </p>
             <AdviceChecklist typeId={anxietyType.id} checkedIds={checkedAdviceIds} />
 

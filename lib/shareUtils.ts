@@ -25,11 +25,11 @@ export function buildShareUrl(typeId: string): string {
   return `${BASE_URL}/result?type=${typeId}`;
 }
 
-// 選んだアドバイスのシェアURL
-export function buildAdviceXShareUrl(adviceTexts: string[]): string {
+// 選んだアドバイスのシェアURL（LINE）
+export function buildAdviceLineShareUrl(adviceTexts: string[]): string {
   const adviceList = adviceTexts.map((t) => `・${t}`).join('\n');
-  const text = encodeURIComponent(
+  const message = encodeURIComponent(
     `私が実践する運転不安への一歩：\n${adviceList}\n#運転パーソナルラボ`
   );
-  return `https://x.com/intent/tweet?text=${text}`;
+  return `https://line.me/R/msg/text/?${message}`;
 }

@@ -56,7 +56,7 @@ export default function AdviceChecklist({ typeId, checkedIds }: AdviceChecklistP
           onClick={handleShareChecked}
           className="w-full py-3 px-4 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
         >
-          <span>選んだ一歩をXでシェア</span>
+          <span>実践する一歩をXでシェア</span>
         </button>
       )}
     </div>

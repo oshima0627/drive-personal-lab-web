@@ -86,7 +86,6 @@ export default function ResultContent() {
     );
   }
 
-  const checkedAdviceIds = result?.checkedAdviceIds ?? [];
   const sharedAdviceItems = isSharedMode ? getAdviceByTypeId(anxietyType.id) : [];
 
   return (
@@ -183,9 +182,9 @@ export default function ResultContent() {
           >
             <h2 className="text-base font-bold text-gray-800 mb-1">次の一歩を考える</h2>
             <p className="text-xs text-gray-400 mb-4">
-              実践するアドバイスにチェックを入れて、自分の歩みを記録しましょう
+              あなたのタイプに合わせた、次の一歩のヒントをご紹介します
             </p>
-            <AdviceChecklist typeId={anxietyType.id} checkedIds={checkedAdviceIds} />
+            <AdviceChecklist typeId={anxietyType.id} />
 
             {/* Online diagnosis CTA */}
             <div className="mt-6 pt-5 border-t border-gray-100">

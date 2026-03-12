@@ -10,15 +10,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'ニックネームとメールアドレスは必須です' }, { status: 400 });
   }
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT ?? 587),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
+  // Supabase に申し込み内容を保存
+  const { error: dbError } = await supabaseAdmin.from('contact_submissions').insert({
+    nickname,
+    email,
+    diagnosis_type: diagnosisType,
+    diagnosis_description: diagnosisDescription,
+    scores: scores ?? null,
+    raw_answers: rawAnswers ?? null,
   });
+  if (dbError) {
+    console.error('DB保存エラー:', dbError);
+  }
+
+  // SMTP 設定がない場合はメール送信をスキップ
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    return NextResponse.json({ success: true });
+  }
 
   const scoresText = scores
     ? `\n【不安度スコア】\n知識不安: ${scores.knowledge}\n技術不安: ${scores.skill}\n経験不安: ${scores.experience}\n環境不安: ${scores.environment}`
@@ -34,12 +42,23 @@ export async function POST(req: NextRequest) {
         }).join('\n')
       : '';
 
-  const mailOptions = {
-    from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
-    to: process.env.CONTACT_TO ?? process.env.SMTP_USER,
-    replyTo: email,
-    subject: `【オンライン診断申し込み】${nickname} さんからのお申し込み`,
-    text: `オンライン診断のお申し込みがありました。
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT ?? 587),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
+      to: process.env.CONTACT_TO ?? process.env.SMTP_USER,
+      replyTo: email,
+      subject: `【オンライン診断申し込み】${nickname} さんからのお申し込み`,
+      text: `オンライン診断のお申し込みがありました。
 
 【ニックネーム】
 ${nickname}
@@ -53,21 +72,7 @@ ${diagnosisType}
 【タイプの説明】
 ${diagnosisDescription}${scoresText}${answersText}
 `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-
-    // Supabase に申し込み内容を保存
-    await supabaseAdmin.from('contact_submissions').insert({
-      nickname,
-      email,
-      diagnosis_type: diagnosisType,
-      diagnosis_description: diagnosisDescription,
-      scores: scores ?? null,
-      raw_answers: rawAnswers ?? null,
     });
-
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('メール送信エラー:', error);

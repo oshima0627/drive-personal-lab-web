@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { buildXShareUrl, buildLineShareUrl, buildShareUrl } from '@/lib/shareUtils';
+import { buildLineShareUrl, buildShareUrl } from '@/lib/shareUtils';
 
 interface ShareButtonsProps {
   typeId: string;
@@ -10,11 +10,6 @@ interface ShareButtonsProps {
 
 export default function ShareButtons({ typeId, typeName }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
-
-  const handleXShare = () => {
-    const url = buildXShareUrl(typeId, typeName);
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
 
   const handleLineShare = () => {
     const url = buildLineShareUrl(typeId, typeName);
@@ -42,24 +37,6 @@ export default function ShareButtons({ typeId, typeName }: ShareButtonsProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      {/* X (Twitter) */}
-      <button
-        onClick={handleXShare}
-        className="w-full py-3 px-4 bg-black text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-        aria-label="Xでシェアする"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-4 h-4"
-          aria-hidden="true"
-        >
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-        </svg>
-        Xでシェア
-      </button>
-
       {/* LINE */}
       <button
         onClick={handleLineShare}

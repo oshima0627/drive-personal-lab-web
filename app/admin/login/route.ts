@@ -6,7 +6,13 @@ export async function POST(req: NextRequest) {
 
   if (pw && pw === process.env.ADMIN_PASSWORD) {
     const res = NextResponse.redirect(new URL('/admin', req.url), { status: 303 });
-    res.cookies.set('admin_authed', 'true', { httpOnly: true, maxAge: 60 * 60 * 8 });
+    res.cookies.set('admin_authed', 'true', {
+      httpOnly: true,
+      maxAge: 60 * 60 * 8,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+    });
     return res;
   }
 

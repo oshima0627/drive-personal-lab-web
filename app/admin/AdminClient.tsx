@@ -52,83 +52,121 @@ function ScoreBadge({ label, value }: { label: string; value: number | undefined
   );
 }
 
-function DiagnosisDetailModal({ d, onClose }: { d: DiagnosisResult; onClose: () => void }) {
-  const anxietyType = getAnxietyTypeById(d.type_id);
+function AnswerList({ rawAnswers }: { rawAnswers: number[] }) {
+  return (
+    <div>
+      <p className="text-xs font-semibold text-gray-500 mb-3">16問の回答</p>
+      <div className="flex flex-col gap-2">
+        {QUESTIONS.map((q) => {
+          const score = rawAnswers[q.orderIndex - 1] ?? 0;
+          const label = ANSWER_OPTIONS.find((o) => o.score === score)?.label ?? '—';
+          const intensity =
+            score === 0 ? 'text-gray-400' :
+            score === 1 ? 'text-yellow-600' :
+            score === 2 ? 'text-orange-500' : 'text-red-600';
+          return (
+            <div key={q.id} className="flex items-start gap-3 bg-gray-50 rounded-xl px-4 py-3">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500 font-bold mt-0.5">
+                {q.id}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-gray-400 mb-0.5">{ANXIETY_TYPE_LABELS[q.anxietyType]}</p>
+                <p className="text-sm text-gray-700">{q.questionText}</p>
+              </div>
+              <span className={`text-xs font-semibold whitespace-nowrap mt-1 ${intensity}`}>{label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
+function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
     <div
-      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 z-50 overflow-y-auto"
       onClick={onClose}
     >
-      <div
-        className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
-          <h2 className="font-bold text-gray-800">診断結果 詳細</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
-        </div>
-
-        <div className="p-5 flex flex-col gap-5">
-          {/* 日時 */}
-          <p className="text-xs text-gray-400">{formatDate(d.taken_at)}</p>
-
-          {/* タイプ */}
-          <div className="bg-blue-50 rounded-xl p-4">
-            <p className="text-xs text-gray-500 mb-1">診断タイプ</p>
-            <p className="font-bold text-blue-700 text-base">{anxietyType?.name ?? d.type_id}</p>
-            {anxietyType && (
-              <p className="text-sm text-gray-600 mt-2 leading-relaxed">{anxietyType.description}</p>
-            )}
+      <div className="min-h-full flex items-start justify-center p-4 py-8">
+        <div
+          className="bg-white rounded-2xl shadow-xl w-full max-w-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10">
+            <h2 className="font-bold text-gray-800">{title}</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
           </div>
-
-          {/* スコア */}
-          <div>
-            <p className="text-xs font-semibold text-gray-500 mb-2">不安度スコア</p>
-            <div className="grid grid-cols-4 gap-2">
-              {SCORE_KEYS.map((k) => (
-                <ScoreBadge key={k} label={SCORE_LABELS[k]} value={d.scores?.[k]} />
-              ))}
-            </div>
+          <div className="p-5 flex flex-col gap-5">
+            {children}
           </div>
-
-          {/* 16問の回答 */}
-          {d.raw_answers && d.raw_answers.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-gray-500 mb-3">16問の回答</p>
-              <div className="flex flex-col gap-2">
-                {QUESTIONS.map((q) => {
-                  const score = d.raw_answers![q.orderIndex - 1] ?? 0;
-                  const label = ANSWER_OPTIONS.find((o) => o.score === score)?.label ?? '—';
-                  const intensity =
-                    score === 0 ? 'text-gray-400' :
-                    score === 1 ? 'text-yellow-600' :
-                    score === 2 ? 'text-orange-500' : 'text-red-600';
-                  return (
-                    <div key={q.id} className="flex items-start gap-3 bg-gray-50 rounded-xl px-4 py-3">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500 font-bold mt-0.5">
-                        {q.id}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-400 mb-0.5">{ANXIETY_TYPE_LABELS[q.anxietyType]}</p>
-                        <p className="text-sm text-gray-700">{q.questionText}</p>
-                      </div>
-                      <span className={`text-xs font-semibold whitespace-nowrap mt-1 ${intensity}`}>{label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
   );
 }
 
+function DiagnosisDetailModal({ d, onClose }: { d: DiagnosisResult; onClose: () => void }) {
+  const anxietyType = getAnxietyTypeById(d.type_id);
+  return (
+    <Modal title="診断結果 詳細" onClose={onClose}>
+      <p className="text-xs text-gray-400">{formatDate(d.taken_at)}</p>
+      <div className="bg-blue-50 rounded-xl p-4">
+        <p className="text-xs text-gray-500 mb-1">診断タイプ</p>
+        <p className="font-bold text-blue-700 text-base">{anxietyType?.name ?? d.type_id}</p>
+        {anxietyType && (
+          <p className="text-sm text-gray-600 mt-2 leading-relaxed">{anxietyType.description}</p>
+        )}
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-gray-500 mb-2">不安度スコア</p>
+        <div className="grid grid-cols-4 gap-2">
+          {SCORE_KEYS.map((k) => (
+            <ScoreBadge key={k} label={SCORE_LABELS[k]} value={d.scores?.[k]} />
+          ))}
+        </div>
+      </div>
+      {d.raw_answers && d.raw_answers.length > 0 && (
+        <AnswerList rawAnswers={d.raw_answers} />
+      )}
+    </Modal>
+  );
+}
+
+function ContactDetailModal({ c, onClose }: { c: ContactSubmission; onClose: () => void }) {
+  return (
+    <Modal title="申し込み 詳細" onClose={onClose}>
+      <p className="text-xs text-gray-400">{formatDate(c.created_at)}</p>
+      <div className="flex flex-col gap-1">
+        <p className="font-bold text-gray-800 text-base">{c.nickname}</p>
+        <a href={`mailto:${c.email}`} className="text-sm text-blue-600 hover:underline">{c.email}</a>
+      </div>
+      <div className="bg-blue-50 rounded-xl p-4">
+        <p className="text-xs text-gray-500 mb-1">診断タイプ</p>
+        <p className="font-bold text-blue-700">{c.diagnosis_type}</p>
+        <p className="text-sm text-gray-600 mt-2 leading-relaxed">{c.diagnosis_description}</p>
+      </div>
+      {c.scores && (
+        <div>
+          <p className="text-xs font-semibold text-gray-500 mb-2">不安度スコア</p>
+          <div className="grid grid-cols-4 gap-2">
+            {SCORE_KEYS.map((k) => (
+              <ScoreBadge key={k} label={SCORE_LABELS[k]} value={c.scores![k]} />
+            ))}
+          </div>
+        </div>
+      )}
+      {c.raw_answers && c.raw_answers.length > 0 && (
+        <AnswerList rawAnswers={c.raw_answers} />
+      )}
+    </Modal>
+  );
+}
+
 export default function AdminClient({ contacts, diagnoses }: Props) {
   const [tab, setTab] = useState<'contacts' | 'diagnoses'>('contacts');
   const [selectedDiagnosis, setSelectedDiagnosis] = useState<DiagnosisResult | null>(null);
+  const [selectedContact, setSelectedContact] = useState<ContactSubmission | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -169,7 +207,11 @@ export default function AdminClient({ contacts, diagnoses }: Props) {
               <p className="text-gray-400 text-sm text-center py-10">申し込みはまだありません</p>
             )}
             {contacts.map((c) => (
-              <div key={c.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+              <div
+                key={c.id}
+                onClick={() => setSelectedContact(c)}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 cursor-pointer hover:bg-blue-50 transition-colors"
+              >
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <p className="font-bold text-gray-800">{c.nickname}</p>
@@ -180,7 +222,6 @@ export default function AdminClient({ contacts, diagnoses }: Props) {
                 <div className="bg-blue-50 rounded-xl px-4 py-3 mb-3">
                   <p className="text-xs text-gray-500 mb-0.5">診断タイプ</p>
                   <p className="text-sm font-semibold text-blue-700">{c.diagnosis_type}</p>
-                  <p className="text-xs text-gray-600 mt-1">{c.diagnosis_description}</p>
                 </div>
                 {c.scores && (
                   <div className="grid grid-cols-4 gap-2">
@@ -235,12 +276,11 @@ export default function AdminClient({ contacts, diagnoses }: Props) {
         )}
       </div>
 
-      {/* Detail modal */}
       {selectedDiagnosis && (
-        <DiagnosisDetailModal
-          d={selectedDiagnosis}
-          onClose={() => setSelectedDiagnosis(null)}
-        />
+        <DiagnosisDetailModal d={selectedDiagnosis} onClose={() => setSelectedDiagnosis(null)} />
+      )}
+      {selectedContact && (
+        <ContactDetailModal c={selectedContact} onClose={() => setSelectedContact(null)} />
       )}
     </div>
   );

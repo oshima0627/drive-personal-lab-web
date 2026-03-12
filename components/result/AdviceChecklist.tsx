@@ -7,14 +7,18 @@ interface AdviceChecklistProps {
 }
 
 export default function AdviceChecklist({ typeId }: AdviceChecklistProps) {
-  const item = getAdviceByTypeId(typeId)[0];
+  const items = getAdviceByTypeId(typeId);
 
-  if (!item) return null;
+  if (items.length === 0) return null;
 
   return (
-    <div className="flex items-start gap-3">
-      <span className="mt-1 text-primary flex-shrink-0">•</span>
-      <span className="text-sm leading-relaxed text-gray-700">{item.text}</span>
+    <div className="flex flex-col gap-3">
+      {items.map((item) => (
+        <div key={item.id} className="flex items-start gap-3">
+          <span className="mt-1 text-primary flex-shrink-0">•</span>
+          <span className="text-sm leading-relaxed text-gray-700">{item.text}</span>
+        </div>
+      ))}
     </div>
   );
 }

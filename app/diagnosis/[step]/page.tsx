@@ -46,13 +46,21 @@ export default function DiagnosisStepPage({ params }: DiagnosisStepPageProps) {
         const scores = calcScores(validAnswers);
         const typeId = resolveTypeId(scores);
 
+        const takenAt = new Date().toISOString();
         setResult({
-          takenAt: new Date().toISOString(),
+          takenAt,
           scores,
           typeId,
           rawAnswers: validAnswers,
           checkedAdviceIds: [],
         });
+
+        // Save to Supabase (fire and forget)
+        fetch('/api/diagnosis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ takenAt, scores, typeId, rawAnswers: validAnswers }),
+        }).catch(() => {/* ignore errors - localStorage is the primary store */});
 
         router.push('/result');
       } else {

@@ -22,11 +22,10 @@ export function calcScores(answers: number[]): Scores {
 export function resolveTypeId(scores: Scores): string {
   // 高不安しきい値：各分類12点満点のうち6点以上 = 50点以上を不安ありと判定
   const HIGH = 50;
-  const LOW_MAX = 40;
 
-  // 低不安タイプ判定：全分類の最高スコアが40点未満
+  // 低不安タイプ判定：全分類が50点未満（不安ありと判定される分類がない）
   const maxScore = Math.max(...Object.values(scores));
-  if (maxScore < LOW_MAX) {
+  if (maxScore < HIGH) {
     return scores.experience >= 17 ? 'low_confident' : 'low_unsure';
   }
 
